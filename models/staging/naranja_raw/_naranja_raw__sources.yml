@@ -1,0 +1,141 @@
+version: 2
+
+sources:
+  - name: naranja_raw
+    description: >
+      Datos operativos crudos de los sistemas core de Naranja X.
+      Esta capa simula lo que una herramienta ELT como Fivetran dejaría
+      en el warehouse: datos sin modificar, una tabla por objeto fuente.
+    database: dbt-training-502321
+    schema: raw_naranja
+    loader: manual_upload
+
+    # NOTA: En dbt Core clásico se puede agregar meta y freshness a nivel source.
+    # Fusion 2.0 preview todavía no los soporta. Ejemplo pendiente de activar:
+    #
+    # meta:
+    #   owner: "@carlos-leguizamon"
+    #   slack_channel: "#data-platform-alerts"
+    #   sla_hours: 6
+    #   compliance:
+    #     contains_pii: true
+    #     pii_regulation: "Ley 25.326 (Argentina)"
+
+    tables:
+      - name: raw_customers
+        description: "Tabla maestra de clientes del core bancario. Una fila por cliente. Contiene PII: email, phone, birth_date, first_name, last_name."
+        # meta:
+        #   contains_pii: true
+        #   pii_columns: ["email", "phone", "birth_date", "first_name", "last_name"]
+        #   data_classification: "confidential"
+        # freshness:
+        #   warn_after: {count: 24, period: hour}
+        #   error_after: {count: 48, period: hour}
+        # loaded_at_field: updated_at
+        columns:
+          - name: customer_id
+            description: "Identificador único del cliente. Clave primaria."
+            tests:
+              - unique
+              - not_null
+          - name: email
+            description: "Email del cliente. PII — enmascarar en dev/qa."
+          - name: customer_segment
+            description: "Segmentación comercial: A (premium) a D (subprime)."
+            tests:
+              - accepted_values:
+                  arguments:
+                    values: ['A', 'B', 'C', 'D']
+          - name: account_status
+            description: "Estado actual de la cuenta."
+            tests:
+              - accepted_values:
+                  arguments:
+                    values: ['active', 'blocked', 'churned']
+
+      - name: raw_applications
+        description: "Solicitudes de crédito desde app, web y sucursales. Una fila por solicitud."
+        # freshness:
+        #   warn_after: {count: 6, period: hour}
+        #   error_after: {count: 24, period: hour}
+        # loaded_at_field: application_date
+        columns:
+          - name: application_id
+            description: "Identificador de la solicitud. Clave primaria."
+            tests:
+              - unique
+              - not_null
+          - name: customer_id
+            description: "Foreign key a raw_customers."
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('naranja_raw', 'raw_customers')
+                    field: customer_id
+          - name: application_status
+            tests:
+              - accepted_values:
+                  arguments:
+                    values: ['approved', 'rejected', 'pending']
+
+      - name: raw_originations
+        description: "Créditos otorgados efectivamente. Una fila por crédito originado."
+        columns:
+          - name: origination_id
+            tests:
+              - unique
+              - not_null
+          - name: application_id
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('naranja_raw', 'raw_applications')
+                    field: application_id
+          - name: customer_id
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('naranja_raw', 'raw_customers')
+                    field: customer_id
+
+      - name: raw_payments
+        description: "Pagos de cuotas recibidos. Una fila por pago. Crítico para cobranzas — SLA de freshness ajustado."
+        columns:
+          - name: payment_id
+            tests:
+              - unique
+              - not_null
+          - name: origination_id
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('naranja_raw', 'raw_originations')
+                    field: origination_id
+          - name: customer_id
+            tests:
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('naranja_raw', 'raw_customers')
+                    field: customer_id
+
+      - name: raw_credit_bureau
+        description: >
+          Reporte de buró de crédito externo por cliente.
+          No todos los clientes tienen reporte — algunos son "credit invisibles".
+          Contiene PII financiera: score, deudas, historial de default.
+        columns:
+          - name: customer_id
+            tests:
+              - unique
+              - not_null
+              - relationships:
+                  arguments:
+                    to: source('naranja_raw', 'raw_customers')
+                    field: customer_id
+          - name: bureau_score
+            description: "Score crediticio del buró. Rango 300-950."

@@ -1,0 +1,4 @@
+product_code,product_name,product_type,risk_tier,min_amount_ars,max_amount_ars,max_term_months
+CREDIT_CARD,Tarjeta de Credito,revolving,medium,50000,3000000,0
+PERSONAL_LOAN,Prestamo Personal,installment,low,100000,5000000,60
+CREDIT_LINE,Linea de Credito,revolving,high,30000,1500000,0

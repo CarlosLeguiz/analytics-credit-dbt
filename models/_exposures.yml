@@ -1,0 +1,28 @@
+version: 2
+
+exposures:
+
+  - name: dashboard_perfil_crediticio
+    label: "Dashboard Perfil Crediticio Naranja X"
+    type: dashboard
+    maturity: high
+    url: https://app.powerbi.com/dashboard/perfil-crediticio
+    description: >
+      Dashboard ejecutivo para el equipo de Risk & Product de Naranja X.
+      Muestra la distribución del portafolio de créditos por segmento de riesgo,
+      indicadores de mora (delinquency rate, DPD promedio, roll rates), 
+      análisis de vintage por cohort de originación, y métricas comerciales
+      (approval rate, take rate, ticket promedio por producto).
+      Se actualiza diariamente después del job dbt de producción.
+
+    depends_on:
+      - ref('fct_credit_profile')
+      - ref('dim_customers')
+      - ref('dim_products')
+      - ref('fct_applications')
+      - ref('fct_originations')
+      - ref('fct_payments')
+
+    owner:
+      name: Carlos Leguizamon
+      email: carlosleguizamonguillaumet1998@gmail.com

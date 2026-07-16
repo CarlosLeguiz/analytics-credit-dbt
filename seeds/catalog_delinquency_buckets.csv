@@ -1,0 +1,7 @@
+bucket_code,bucket_name,dpd_min,dpd_max,is_delinquent,severity_order
+CURRENT,Al dia,0,0,N,1
+B1_29,1-29 dias,1,29,Y,2
+B30_59,30-59 dias,30,59,Y,3
+B60_89,60-89 dias,60,89,Y,4
+B90_PLUS,90+ dias,90,179,Y,5
+DEFAULT,Default (WO),180,9999,Y,6

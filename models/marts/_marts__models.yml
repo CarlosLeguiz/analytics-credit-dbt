@@ -1,0 +1,217 @@
+version: 2
+
+models:
+
+  # DIMENSIONES
+
+  - name: dim_customers
+    description: >
+      Dimensión de clientes de Naranja X enriquecida con datos del buró de crédito.
+      Grain: 1 fila por cliente.
+      Incluye segmentación demográfica, banda de ingresos y perfil de riesgo del buró.
+    columns:
+      - name: customer_id
+        description: "Identificador único del cliente. Clave primaria."
+        tests:
+          - unique
+          - not_null
+
+      - name: age_group
+        description: "Banda etaria del cliente: 18-24, 25-34, 35-44, 45-54, 55+."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['18-24', '25-34', '35-44', '45-54', '55+']
+
+      - name: income_tier
+        description: "Segmentación por nivel de ingresos: LOW, MID, HIGH, PREMIUM."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['LOW', 'MID', 'HIGH', 'PREMIUM']
+
+      - name: customer_segment
+        description: "Segmento comercial de Naranja X: A (premium) a D (subprime)."
+        tests:
+          - not_null
+
+      - name: bureau_score
+        description: "Score crediticio del buró externo. Rango 300-950. Nulo si el cliente es credit invisible."
+
+      - name: debt_to_annual_income_ratio
+        description: "Ratio deuda sobre ingreso anual (DTI). Métrica clave de riesgo crediticio."
+
+
+  - name: dim_products
+    description: >
+      Dimensión de catálogo de productos crediticios.
+      Se alimenta del seed catalog_products.
+      Grain: 1 fila por código de producto.
+    columns:
+      - name: product_code
+        description: "Identificador del producto: CREDIT_CARD, PERSONAL_LOAN, CREDIT_LINE."
+        tests:
+          - unique
+          - not_null
+      - name: risk_tier
+        description: "Nivel de riesgo asociado al producto: low, medium, high."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['low', 'medium', 'high']
+
+
+  # FACTS
+
+  - name: fct_applications
+    description: >
+      Fact table de solicitudes de crédito.
+      Grain: 1 fila por solicitud.
+      Preserva solicitudes aprobadas, rechazadas Y pendientes para permitir análisis de funnel completo.
+    columns:
+      - name: application_id
+        description: "Identificador de la solicitud. Clave primaria."
+        tests:
+          - unique
+          - not_null
+
+      - name: customer_id
+        description: "Clave foránea a dim_customers."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+
+      - name: product_code
+        description: "Clave foránea a dim_products."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: product_code
+
+      - name: requested_amount_ars
+        description: "Monto solicitado por el cliente en pesos argentinos."
+
+      - name: application_status
+        description: "Estado final de la solicitud: approved, rejected o pending."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['approved', 'rejected', 'pending']
+
+
+  - name: fct_originations
+    description: >
+      Fact table de créditos otorgados (originaciones efectivas).
+      Grain: 1 fila por crédito originado.
+      Solo incluye solicitudes que fueron aprobadas Y aceptadas por el cliente.
+    columns:
+      - name: origination_id
+        description: "Identificador de la originación. Clave primaria."
+        tests:
+          - unique
+          - not_null
+
+      - name: customer_id
+        description: "Clave foránea a dim_customers."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+
+      - name: product_code
+        description: "Clave foránea a dim_products."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_products')
+                field: product_code
+
+      - name: approved_amount_ars
+        description: "Monto efectivamente otorgado al cliente en pesos argentinos."
+
+
+  - name: fct_payments
+    description: >
+      Fact table de pagos con clasificación de mora aplicada.
+      Grain: 1 fila por cuota pagada.
+      Incluye DPD (Days Past Due) y clasificación en buckets de mora.
+    columns:
+      - name: payment_id
+        description: "Identificador del pago. Clave primaria."
+        tests:
+          - unique
+          - not_null
+
+      - name: origination_id
+        description: "Clave foránea al crédito al que pertenece este pago."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('fct_originations')
+                field: origination_id
+
+      - name: customer_id
+        description: "Clave foránea a dim_customers."
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+
+      - name: days_past_due
+        description: "Días de atraso en el pago. 0 = al día, positivo = pago con mora."
+
+      - name: bucket_code
+        description: "Bucket de mora: CURRENT, B1_29, B30_59, B60_89, B90_PLUS, DEFAULT."
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['CURRENT', 'B1_29', 'B30_59', 'B60_89', 'B90_PLUS', 'DEFAULT']
+
+
+  - name: fct_credit_profile
+    description: >
+      Accumulating snapshot fact: perfil crediticio consolidado por cliente.
+      Grain: 1 fila por cliente.
+      Vista denormalizada que combina demografía, datos del buró, actividad de solicitudes,
+      volumen de créditos, comportamiento de pagos y clasificación de riesgo derivada.
+      Esta es la tabla principal consumida por los dashboards ejecutivos.
+    columns:
+      - name: customer_id
+        description: "Clave primaria. Una fila por cliente."
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id
+
+      - name: current_risk_status
+        description: >
+          Clasificación de riesgo derivada según peor DPD histórico del cliente:
+          CURRENT (nunca en mora), LOW_RISK (1-29 dpd), MEDIUM_RISK (30-89),
+          HIGH_RISK (90-179), DEFAULT (180+ días), NO_HISTORY (sin pagos aún).
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['CURRENT', 'LOW_RISK', 'MEDIUM_RISK', 'HIGH_RISK', 'DEFAULT', 'NO_HISTORY']
+
+      - name: approval_rate
+        description: "Solicitudes aprobadas / solicitudes totales. Nulo si el cliente no hizo solicitudes."
+
+      - name: take_rate
+        description: "Créditos originados / solicitudes aprobadas. Mide cuántos aprobados se convierten en crédito efectivo."
+
+      - name: is_healthy_active_customer
+        description: "Flag ejecutivo. True cuando el cliente tiene créditos originados, ningún pago en mora, y su cuenta está activa."
