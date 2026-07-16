@@ -1,15 +1,12 @@
-Welcome to your new dbt project!
+# Analytics Credit — dbt Project
 
-### Using the starter project
+Fintech credit portfolio analytics use case. Simulates a credit product 
+domain similar to Naranja X, with staging/intermediate/marts layers 
+following Kimball star schema methodology.
 
-Try running the following commands:
-- dbt run
-- dbt test
+## Stack
 
-
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [dbt community](https://getdbt.com/community) to learn from other analytics engineers
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+- **Warehouse**: BigQuery (Google Cloud)
+- **Transformation**: dbt Cloud (Fusion 2.0)
+- **Orchestration**: Airflow (local, Astronomer)
+- **BI**: Power BI Desktop
