@@ -16,7 +16,7 @@ exposures:
       Se actualiza diariamente después del job dbt de producción.
 
     depends_on:
-      - ref('fct_credit_profile')
+      - ref('agg_customer_360')
       - ref('dim_customers')
       - ref('dim_products')
       - ref('fct_applications')
