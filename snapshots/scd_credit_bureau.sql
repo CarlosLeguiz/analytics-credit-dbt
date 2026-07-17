@@ -36,7 +36,7 @@
         active_debts_count,
         delinquencies_last_12m,
         has_default_history,
-        report_date
+        timestamp(report_date) as report_date
     from {{ source('naranja_raw', 'raw_credit_bureau') }}
 
 {% endsnapshot %}
