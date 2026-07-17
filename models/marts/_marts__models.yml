@@ -11,6 +11,7 @@ models:
       Dimensión de clientes de Naranja X enriquecida con datos del buró de crédito.
       Grano: 1 fila por cliente.
       Incluye segmentación demográfica, banda de ingresos y perfil de riesgo del buró.
+      Hereda informacion de snapshot del buró.
     columns:
       - name: customer_id
         description: "Identificador único del cliente. Clave primaria."
