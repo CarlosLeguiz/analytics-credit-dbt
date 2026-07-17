@@ -15,6 +15,7 @@ final as (
 
     select
 
+        {{ generate_customer_sk() }} as customer_sk,
         customer_id,
         full_name,
         email,

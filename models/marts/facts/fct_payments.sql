@@ -21,7 +21,10 @@ final as (
 
     select
         
-        payment_id,
+        {{ generate_customer_sk() }} as customer_sk, --sk para consistencia
+
+        --key naturales
+        payment_id, 
         origination_id,
         customer_id,
 
