@@ -1,3 +1,32 @@
+/*
+    agg_customer_360 (antes fct_credit_profile)
+    ============================================
+    
+    Propósito:
+        Mart de agregación con grano = customer_id.
+        Consolida métricas de fct_applications, fct_originations y
+        fct_payments en una tabla wide centrada en el cliente, pensada
+        para análisis de segmentación y perfilamiento de riesgo.
+    
+    Por qué NO es un fact:
+        Se renombró desde fct_credit_profile porque violaba la semántica
+        Kimball: tenía grano no atómico (cliente, no evento) y consumía
+        otras tablas fact. El prefijo agg_ refleja su naturaleza real
+        como mart pre-agregado derivado.
+    
+    Grano:
+        1 fila por customer_id (natural key).
+    
+    Consumidores:
+        - Power BI: dashboard_perfil_crediticio (página Vista Cliente).
+    
+    Decisiones de diseño:
+        - Sin relación con dim_products: las métricas están agregadas
+          a través de todos los productos por cliente.
+        - Sin grano temporal: representa el estado actual, no la historia.
+          Para análisis de evolución del score en el tiempo ver
+          fct_credit_score_snapshot (PR #6 del refactor).
+*/
 {{
     config(
         materialized='table',

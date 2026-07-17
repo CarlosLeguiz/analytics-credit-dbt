@@ -2,12 +2,14 @@ version: 2
 
 models:
 
+
   # DIMENSIONES
+
 
   - name: dim_customers
     description: >
       Dimensión de clientes de Naranja X enriquecida con datos del buró de crédito.
-      Grain: 1 fila por cliente.
+      Grano: 1 fila por cliente.
       Incluye segmentación demográfica, banda de ingresos y perfil de riesgo del buró.
     columns:
       - name: customer_id
@@ -46,7 +48,7 @@ models:
     description: >
       Dimensión de catálogo de productos crediticios.
       Se alimenta del seed catalog_products.
-      Grain: 1 fila por código de producto.
+      Grano: 1 fila por código de producto.
     columns:
       - name: product_code
         description: "Identificador del producto: CREDIT_CARD, PERSONAL_LOAN, CREDIT_LINE."
@@ -61,12 +63,14 @@ models:
                 values: ['low', 'medium', 'high']
 
 
-  # FACTS
+
+  # FACTS (eventos atómicos)
+
 
   - name: fct_applications
     description: >
       Fact table de solicitudes de crédito.
-      Grain: 1 fila por solicitud.
+      Grano: 1 fila por solicitud.
       Preserva solicitudes aprobadas, rechazadas Y pendientes para permitir análisis de funnel completo.
     columns:
       - name: application_id
@@ -107,7 +111,7 @@ models:
   - name: fct_originations
     description: >
       Fact table de créditos otorgados (originaciones efectivas).
-      Grain: 1 fila por crédito originado.
+      Grano: 1 fila por crédito originado.
       Solo incluye solicitudes que fueron aprobadas Y aceptadas por el cliente.
     columns:
       - name: origination_id
@@ -141,7 +145,7 @@ models:
   - name: fct_payments
     description: >
       Fact table de pagos con clasificación de mora aplicada.
-      Grain: 1 fila por cuota pagada.
+      Grano: 1 fila por cuota pagada.
       Incluye DPD (Days Past Due) y clasificación en buckets de mora.
     columns:
       - name: payment_id
@@ -179,16 +183,24 @@ models:
                 values: ['CURRENT', 'B1_29', 'B30_59', 'B60_89', 'B90_PLUS', 'DEFAULT']
 
 
-  - name: fct_credit_profile
+
+  # AGGREGATION MARTS (métricas pre-agregadas derivadas)
+
+
+  - name: agg_customer_360
     description: >
-      Accumulating snapshot fact: perfil crediticio consolidado por cliente.
-      Grain: 1 fila por cliente.
-      Vista denormalizada que combina demografía, datos del buró, actividad de solicitudes,
-      volumen de créditos, comportamiento de pagos y clasificación de riesgo derivada.
-      Esta es la tabla principal consumida por los dashboards ejecutivos.
+      Mart de agregación con grano = customer_id. Consolida métricas de
+      fct_applications, fct_originations y fct_payments en una tabla wide
+      centrada en el cliente, usada para segmentación y análisis de riesgo.
+      
+      Renombrado desde fct_credit_profile — semánticamente es un mart
+      derivado pre-agregado, no un fact table Kimball (no tiene grano
+      atómico de evento).
+      
+      Consumidores: dashboard_perfil_crediticio (Power BI).
     columns:
       - name: customer_id
-        description: "Clave primaria. Una fila por cliente."
+        description: "Natural key. Una fila por cliente."
         tests:
           - unique
           - not_null
