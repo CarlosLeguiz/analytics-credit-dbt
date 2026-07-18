@@ -45,9 +45,22 @@ holidays as (
         holiday_name,
         holiday_type,
         is_bank_holiday
-    from {{ ref('holidays_ar') }}
+    from (
+        select
+            date,
+            holiday_name,
+            holiday_type,
+            is_bank_holiday,
+            row_number() over ( -- Deduplicacion defensiva: el seed puede tener multiples entradas
+                partition by date
+                order by holiday_name
+            ) as rn
+        from {{ ref('holidays_ar') }}
+    )
+    where rn = 1
 
 ),
+
 
 joined as (
 
