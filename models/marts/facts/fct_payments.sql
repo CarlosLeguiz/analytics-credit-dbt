@@ -1,19 +1,29 @@
 {{
     config(
-        materialized='table',
+        materialized='incremental',
+        unique_key='payment_id',
+        incremental_strategy='merge',
         tags=['mart', 'fact', 'payments'],
         partition_by={
-            "field": "due_date",
+            "field": "payment_date",
             "data_type": "date",
-            "granularity": "day"
+            "granularity": "month"
         },
-        cluster_by=['bucket_code']
+        cluster_by=['bucket_code', 'customer_sk', 'due_date'],
+        on_schema_change='append_new_columns'
     )
 }}
 
 with payments as (
 
     select * from {{ ref('int_payments_delinquency') }}
+
+    {% if is_incremental() %}
+        where payment_date >= (
+            select date_sub(max(payment_date), interval 3 day)
+            from {{ this }}
+        )
+    {% endif %}
 
 ),
 

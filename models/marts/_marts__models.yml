@@ -151,9 +151,15 @@ models:
 
   - name: fct_payments
     description: >
-      Fact table de pagos con clasificación de mora aplicada.
-      Grano: 1 fila por cuota pagada.
-      Incluye DPD (Days Past Due) y clasificación en buckets de mora.
+      Fact de pagos con materializacion incremental (strategy merge).
+      Grano: 1 fila por evento de pago realizado.
+      
+      Particionado por payment_date con granularity mensual, clusterizado
+      por bucket_code, customer_sk y due_date. Incremental usa lookback
+      de 3 dias sobre payment_date para capturar late-arrivings por
+      conciliacion bancaria.
+      
+      Para full refresh usar --full-refresh flag.
     columns:
       - name: customer_sk
         description: "Surrogate key del cliente. Se joinea con dim_customers.customer_sk."
