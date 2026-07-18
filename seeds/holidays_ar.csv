@@ -1,0 +1,194 @@
+date,holiday_name,holiday_type,is_bank_holiday
+2020-01-01,Año Nuevo,national,true
+2020-02-24,Carnaval,national,true
+2020-02-25,Carnaval,national,true
+2020-03-23,Feriado puente Día de la Memoria,national,true
+2020-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,national,true
+2020-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,national,true
+2020-04-10,Viernes Santo,national,true
+2020-05-01,Día del Trabajador,national,true
+2020-05-25,Día de la Revolución de Mayo,national,true
+2020-06-15,Día Paso a la Inmortalidad del Gral Guemes,national,true
+2020-06-20,Día Paso a la Inmortalidad del Gral Belgrano,national,true
+2020-07-09,Día de la Independencia,national,true
+2020-07-10,Feriado puente Día de la Independencia,national,true
+2020-08-17,Día Paso a la Inmortalidad del Gral San Martín,national,true
+2020-10-12,Día del Respeto a la Diversidad Cultural,national,true
+2020-11-23,Día de la Soberanía Nacional,national,true
+2020-12-07,Feriado puente Inmaculada Concepción,national,true
+2020-12-08,Inmaculada Concepción de María,national,true
+2020-12-25,Navidad,national,true
+2021-01-01,Año Nuevo,national,true
+2021-02-15,Carnaval,national,true
+2021-02-16,Carnaval,national,true
+2021-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,national,true
+2021-04-01,Semana Santa (jueves),observance,false
+2021-04-02,Viernes Santo,national,true
+2021-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,national,true
+2021-05-01,Día del Trabajador,national,true
+2021-05-24,Feriado puente Día de la Revolución de Mayo,national,true
+2021-05-25,Día de la Revolución de Mayo,national,true
+2021-06-17,Día Paso a la Inmortalidad del Gral Guemes,national,true
+2021-06-20,Día Paso a la Inmortalidad del Gral Belgrano,national,true
+2021-06-21,Feriado puente Belgrano,national,true
+2021-07-09,Día de la Independencia,national,true
+2021-08-16,Día Paso a la Inmortalidad del Gral San Martín,national,true
+2021-10-08,Feriado puente Día del Respeto a la Diversidad Cultural,national,true
+2021-10-11,Día del Respeto a la Diversidad Cultural,national,true
+2021-11-20,Día de la Soberanía Nacional,national,true
+2021-11-22,Feriado puente Día de la Soberanía Nacional,national,true
+2021-12-08,Inmaculada Concepción de María,national,true
+2021-12-24,Feriado puente Navidad,national,true
+2021-12-25,Navidad,national,true
+2022-01-01,Año Nuevo,national,true
+2022-02-28,Carnaval,national,true
+2022-03-01,Carnaval,national,true
+2022-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,national,true
+2022-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,national,true
+2022-04-15,Viernes Santo,national,true
+2022-05-01,Día del Trabajador,national,true
+2022-05-25,Día de la Revolución de Mayo,national,true
+2022-06-17,Día Paso a la Inmortalidad del Gral Guemes,national,true
+2022-06-20,Día Paso a la Inmortalidad del Gral Belgrano,national,true
+2022-07-09,Día de la Independencia,national,true
+2022-08-15,Día Paso a la Inmortalidad del Gral San Martín,national,true
+2022-10-07,Feriado puente Día del Respeto a la Diversidad Cultural,national,true
+2022-10-10,Día del Respeto a la Diversidad Cultural,national,true
+2022-11-20,Día de la Soberanía Nacional,national,true
+2022-11-21,Feriado puente Día de la Soberanía Nacional,national,true
+2022-12-08,Inmaculada Concepción de María,national,true
+2022-12-09,Feriado puente Inmaculada Concepción,national,true
+2022-12-25,Navidad,national,true
+2023-01-01,Año Nuevo,national,true
+2023-02-20,Carnaval,national,true
+2023-02-21,Carnaval,national,true
+2023-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,national,true
+2023-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,national,true
+2023-04-07,Viernes Santo,national,true
+2023-05-01,Día del Trabajador,national,true
+2023-05-25,Día de la Revolución de Mayo,national,true
+2023-06-17,Día Paso a la Inmortalidad del Gral Guemes,national,true
+2023-06-19,Feriado puente Día del Gral Belgrano,national,true
+2023-06-20,Día Paso a la Inmortalidad del Gral Belgrano,national,true
+2023-07-09,Día de la Independencia,national,true
+2023-08-21,Día Paso a la Inmortalidad del Gral San Martín,national,true
+2023-10-13,Feriado puente Día del Respeto a la Diversidad Cultural,national,true
+2023-10-16,Día del Respeto a la Diversidad Cultural,national,true
+2023-11-20,Día de la Soberanía Nacional,national,true
+2023-12-08,Inmaculada Concepción de María,national,true
+2023-12-25,Navidad,national,true
+2024-01-01,Año Nuevo,national,true
+2024-02-12,Carnaval,national,true
+2024-02-13,Carnaval,national,true
+2024-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,national,true
+2024-03-29,Viernes Santo,national,true
+2024-04-01,Feriado puente Día del Veterano,national,true
+2024-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,national,true
+2024-05-01,Día del Trabajador,national,true
+2024-05-25,Día de la Revolución de Mayo,national,true
+2024-06-17,Día Paso a la Inmortalidad del Gral Guemes,national,true
+2024-06-20,Día Paso a la Inmortalidad del Gral Belgrano,national,true
+2024-06-21,Feriado puente Día del Gral Belgrano,national,true
+2024-07-09,Día de la Independencia,national,true
+2024-08-17,Día Paso a la Inmortalidad del Gral San Martín,national,true
+2024-10-11,Feriado puente Día del Respeto a la Diversidad Cultural,national,true
+2024-10-12,Día del Respeto a la Diversidad Cultural,national,true
+2024-11-18,Día de la Soberanía Nacional,national,true
+2024-12-08,Inmaculada Concepción de María,national,true
+2024-12-25,Navidad,national,true
+2025-01-01,Año Nuevo,national,true
+2025-03-03,Carnaval,national,true
+2025-03-04,Carnaval,national,true
+2025-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,national,true
+2025-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,national,true
+2025-04-18,Viernes Santo,national,true
+2025-05-01,Día del Trabajador,national,true
+2025-05-25,Día de la Revolución de Mayo,national,true
+2025-06-16,Día Paso a la Inmortalidad del Gral Guemes,national,true
+2025-06-20,Día Paso a la Inmortalidad del Gral Belgrano,national,true
+2025-07-09,Día de la Independencia,national,true
+2025-08-17,Día Paso a la Inmortalidad del Gral San Martín,national,true
+2025-10-12,Día del Respeto a la Diversidad Cultural,national,true
+2025-11-24,Día de la Soberanía Nacional,national,true
+2025-12-08,Inmaculada Concepción de María,national,true
+2025-12-25,Navidad,national,true
+2026-01-01,Año Nuevo,national,true
+2026-02-16,Carnaval,national,true
+2026-02-17,Carnaval,national,true
+2026-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,national,true
+2026-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,national,true
+2026-04-03,Viernes Santo,national,true
+2026-05-01,Día del Trabajador,national,true
+2026-05-25,Día de la Revolución de Mayo,national,true
+2026-06-15,Día Paso a la Inmortalidad del Gral Guemes,national,true
+2026-06-20,Día Paso a la Inmortalidad del Gral Belgrano,national,true
+2026-07-09,Día de la Independencia,national,true
+2026-08-17,Día Paso a la Inmortalidad del Gral San Martín,national,true
+2026-10-12,Día del Respeto a la Diversidad Cultural,national,true
+2026-11-23,Día de la Soberanía Nacional,national,true
+2026-12-08,Inmaculada Concepción de María,national,true
+2026-12-25,Navidad,national,true
+2027-01-01,Año Nuevo,national,true
+2027-02-08,Carnaval,national,true
+2027-02-09,Carnaval,national,true
+2027-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,national,true
+2027-03-26,Viernes Santo,national,true
+2027-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,national,true
+2027-05-01,Día del Trabajador,national,true
+2027-05-25,Día de la Revolución de Mayo,national,true
+2027-06-17,Día Paso a la Inmortalidad del Gral Guemes,national,true
+2027-06-20,Día Paso a la Inmortalidad del Gral Belgrano,national,true
+2027-07-09,Día de la Independencia,national,true
+2027-08-17,Día Paso a la Inmortalidad del Gral San Martín,national,true
+2027-10-11,Día del Respeto a la Diversidad Cultural,national,true
+2027-11-22,Día de la Soberanía Nacional,national,true
+2027-12-08,Inmaculada Concepción de María,national,true
+2027-12-25,Navidad,national,true
+2028-01-01,Año Nuevo,national,true
+2028-02-28,Carnaval,national,true
+2028-02-29,Carnaval,national,true
+2028-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,national,true
+2028-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,national,true
+2028-04-14,Viernes Santo,national,true
+2028-05-01,Día del Trabajador,national,true
+2028-05-25,Día de la Revolución de Mayo,national,true
+2028-06-17,Día Paso a la Inmortalidad del Gral Guemes,national,true
+2028-06-20,Día Paso a la Inmortalidad del Gral Belgrano,national,true
+2028-07-09,Día de la Independencia,national,true
+2028-08-21,Día Paso a la Inmortalidad del Gral San Martín,national,true
+2028-10-16,Día del Respeto a la Diversidad Cultural,national,true
+2028-11-20,Día de la Soberanía Nacional,national,true
+2028-12-08,Inmaculada Concepción de María,national,true
+2028-12-25,Navidad,national,true
+2029-01-01,Año Nuevo,national,true
+2029-02-12,Carnaval,national,true
+2029-02-13,Carnaval,national,true
+2029-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,national,true
+2029-03-30,Viernes Santo,national,true
+2029-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,national,true
+2029-05-01,Día del Trabajador,national,true
+2029-05-25,Día de la Revolución de Mayo,national,true
+2029-06-17,Día Paso a la Inmortalidad del Gral Guemes,national,true
+2029-06-20,Día Paso a la Inmortalidad del Gral Belgrano,national,true
+2029-07-09,Día de la Independencia,national,true
+2029-08-20,Día Paso a la Inmortalidad del Gral San Martín,national,true
+2029-10-15,Día del Respeto a la Diversidad Cultural,national,true
+2029-11-19,Día de la Soberanía Nacional,national,true
+2029-12-08,Inmaculada Concepción de María,national,true
+2029-12-25,Navidad,national,true
+2030-01-01,Año Nuevo,national,true
+2030-03-04,Carnaval,national,true
+2030-03-05,Carnaval,national,true
+2030-03-24,Día Nacional de la Memoria por la Verdad y la Justicia,national,true
+2030-04-02,Día del Veterano y de los Caídos en la Guerra de Malvinas,national,true
+2030-04-19,Viernes Santo,national,true
+2030-05-01,Día del Trabajador,national,true
+2030-05-25,Día de la Revolución de Mayo,national,true
+2030-06-17,Día Paso a la Inmortalidad del Gral Guemes,national,true
+2030-06-20,Día Paso a la Inmortalidad del Gral Belgrano,national,true
+2030-07-09,Día de la Independencia,national,true
+2030-08-19,Día Paso a la Inmortalidad del Gral San Martín,national,true
+2030-10-14,Día del Respeto a la Diversidad Cultural,national,true
+2030-11-25,Día de la Soberanía Nacional,national,true
+2030-12-08,Inmaculada Concepción de María,national,true
+2030-12-25,Navidad,national,true

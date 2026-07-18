@@ -69,6 +69,36 @@ models:
               arguments:
                 values: ['low', 'medium', 'high']
 
+      
+  - name: dim_date
+    description: >
+      Dimension de fechas conformed a nivel warehouse. Grano: 1 fila por dia
+      desde 2020-01-01 hasta 2030-12-31. Incluye feriados nacionales
+      argentinos desde el seed holidays_ar y flags de business
+      day para calculos de mora habil.
+    columns:
+      - name: date
+        description: "Natural key. Fecha en formato DATE."
+        tests:
+          - unique
+          - not_null
+      
+      - name: date_sk
+        description: "Surrogate key en formato INT YYYYMMDD (ej: 20260718)."
+        tests:
+          - unique
+          - not_null
+      
+      - name: is_business_day
+        description: "True si es dia habil (weekday y no feriado bancario)."
+        tests:
+          - not_null
+      
+      - name: is_holiday
+        description: "True si es feriado nacional AR."
+        tests:
+          - not_null
+
 
 
   # FACTS (eventos atómicos)

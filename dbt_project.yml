@@ -47,3 +47,20 @@ models:
 snapshots:
   analytics_credit:
     +target_schema: snapshots
+  
+seeds:
+  analytics_credit:
+    +schema: seeds
+    catalog_delinquency_buckets:
+      +column_types:
+        dpd_min: int64
+        dpd_max: int64
+        severity_order: int64
+    catalog_products:
+      +column_types:
+        min_amount_ars: numeric
+        max_amount_ars: numeric
+    holidays_ar:
+      +column_types:
+        date: date
+        is_bank_holiday: bool
