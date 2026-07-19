@@ -4,6 +4,7 @@
 --
 -- Rango: 2020-01-01 a 2030-12-31 (11 anios, ~4018 filas).
 -- Feriados nacionales AR provenientes del seed holidays_ar (Ley 27.399).
+-- Test de integracion dbt Cloud <-> GitLab (branch test).
 --
 -- Vive en schema core (analytics_core en prod, dbt_carlos_core en dev)
 -- para explicitar que es una conformed dimension compartida entre dominios.
