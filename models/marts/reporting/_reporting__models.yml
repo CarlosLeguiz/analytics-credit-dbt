@@ -1,0 +1,125 @@
+version: 2
+
+models:
+  - name: rpt_executive_summary
+    description: |
+      Reporting mart mensual para la pagina "Resumen" del dashboard ejecutivo.
+      Grano: 1 row por mes. Cubre desde el primer mes con actividad de negocio
+      hasta el mes actual. Metricas base pre-agregadas para consumo directo
+      desde Power BI. Ratios (approval rate, delinquency rate, ticket promedio,
+      dpd promedio) se calculan en Power BI con DIVIDE de SUMs para preservar
+      correctness bajo cualquier filter context.
+    
+    config:
+      contract:
+        enforced: false
+    
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - period_month
+    
+    columns:
+      - name: period_month
+        description: "Primer dia del mes (grano del mart). Formato DATE."
+        tests:
+          - not_null
+          - dbt_utils.not_empty_string:
+              config:
+                enabled: false
+      
+      - name: year_number
+        description: "Numero de anio (ej: 2026). Denormalizado desde dim_date."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 2020
+              max_value: 2030
+      
+      - name: month_number
+        description: "Numero de mes del anio (1-12)."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              max_value: 12
+      
+      - name: month_name
+        description: "Nombre completo del mes en ingles (ej: 'January')."
+        tests:
+          - not_null
+      
+      - name: applications_count
+        description: "Total de aplicaciones ingresadas en el mes."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      
+      - name: approved_applications_count
+        description: |
+          Aplicaciones aprobadas en el mes. Numerador para "% Approval Rate".
+          Ratio se calcula en Power BI como DIVIDE(SUM(approved), SUM(applications)).
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      
+      - name: rejected_applications_count
+        description: "Aplicaciones rechazadas en el mes."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      
+      - name: originations_count
+        description: |
+          Total de originaciones en el mes. Numerador para "% Take Rate"
+          (originations / approved). Denominador para "Ticket Promedio"
+          (volumen / originations).
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      
+      - name: approved_amount_ars
+        description: |
+          Volumen total otorgado en ARS. Denominador para "Ticket Promedio".
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      
+      - name: payments_count
+        description: |
+          Total de pagos registrados en el mes. Denominador para "% Delinquency Rate"
+          y para "DPD Promedio".
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      
+      - name: delinquent_payments_count
+        description: |
+          Pagos marcados como delinquent (is_delinquent_payment = TRUE en fct_payments).
+          Numerador para "% Delinquency Rate".
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      
+      - name: sum_days_past_due
+        description: |
+          Suma de dias de atraso de todos los pagos del mes. Numerador para
+          "DPD Promedio" (sum_days_past_due / payments_count). Se guarda como
+          suma en vez de promedio pre-calculado para que Power BI pueda
+          recalcular el promedio ponderado bajo cualquier filter context.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+      
+      - name: dbt_updated_at
+        description: "Timestamp UTC de la ultima corrida del modelo."
+        tests:
+          - not_null
