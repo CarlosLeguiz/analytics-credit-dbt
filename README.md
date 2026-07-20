@@ -10,3 +10,5 @@ following Kimball star schema methodology.
 - **Transformation**: dbt Cloud (Fusion 2.0)
 - **Orchestration**: Airflow (local, Astronomer)
 - **BI**: Power BI Desktop
+
+## Autor
