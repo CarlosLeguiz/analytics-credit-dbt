@@ -139,3 +139,98 @@ models:
         description: "Timestamp UTC de la ultima corrida del modelo."
         tests:
           - not_null
+
+  - name: rpt_portfolio_delinquency
+    description: |
+      Reporting mart mensual de distribucion de cartera por bucket de mora.
+      Grano: (period_month, bucket_code, product_name). Responde: como se
+      distribuye mi cartera por bucket a lo largo del tiempo y por producto.
+
+    config:
+      contract:
+        enforced: false
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - period_month
+              - bucket_code
+              - product_code
+
+    columns:
+      - name: period_month
+        tests:
+          - not_null
+
+      - name: bucket_code
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CURRENT', 'B1_29', 'B30_59', 'B60_89', 'B90_PLUS', 'DEFAULT']
+
+      - name: bucket_name
+        tests:
+          - not_null
+
+      - name: severity_order
+        tests:
+          - not_null
+
+      - name: product_code
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CREDIT_CARD', 'CREDIT_LINE', 'PERSONAL_LOAN']
+
+      - name: product_name
+        tests:
+          - not_null
+
+      - name: payments_count
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: customers_in_bucket_count
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: delinquent_payments_count
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: total_due_amount_ars
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: total_paid_amount_ars
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: sum_days_past_due
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: dbt_updated_at
+        tests:
+          - not_null
