@@ -57,6 +57,11 @@ models:
           - accepted_values:
               arguments:
                 values: ['CREDIT_CARD', 'CREDIT_LINE', 'PERSONAL_LOAN']
+                
+      - name: product_name
+        description: "Nombre descriptivo del producto (para display en dashboards)."
+        tests:
+          - not_null
 
       - name: customer_segment
         description: "Segmento comercial del cliente (parte del grano compuesto)."
