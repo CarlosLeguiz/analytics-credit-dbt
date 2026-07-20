@@ -44,6 +44,7 @@ date_spine as (
 dim_combos as (
     select distinct
         p.product_code,
+        p.product_name,
         c.customer_segment
     from {{ ref('dim_products') }} p
     cross join (
@@ -61,6 +62,7 @@ full_spine as (
         d.month_number,
         d.month_name,
         c.product_code,
+        c.product_name,
         c.customer_segment
     from date_spine d
     cross join dim_combos c
@@ -115,6 +117,7 @@ final as (
         s.month_number,
         s.month_name,
         s.product_code,
+        s.product_name,
         s.customer_segment,
 
         -- Metricas base de applications
