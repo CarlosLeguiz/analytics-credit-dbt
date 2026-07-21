@@ -92,13 +92,13 @@ Los reporting marts (`rpt_executive_summary`, `rpt_portfolio_delinquency`) expon
 
 KPIs ejecutivos del funnel de originaciones: solicitudes, aprobaciones, volumen otorgado, ticket promedio. Split por producto (Tarjeta / Personal / Línea) y segmento comercial (A/B/C/D).
 
-_[Screenshot: `docs/screenshots/dashboard-resumen.png`]_
+![Resumen de créditos](docs/screenshots/dashboard-resumen.png)
 
 ### Página 2 — Cartera
 
 Distribución de portfolio por bucket de mora (CURRENT / B1-29 / B30-59). Monto en mora por producto, matriz cross-filter producto × bucket, KPIs de DPD promedio y clientes únicos con exposición.
 
-_[Screenshot: `docs/screenshots/dashboard-cartera.png`]_
+![Cartera - Análisis de Riesgo](docs/screenshots/dashboard-cartera.png)
 
 ---
 
