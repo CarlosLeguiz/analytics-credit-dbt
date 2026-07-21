@@ -102,24 +102,14 @@ Distribución de portfolio por bucket de mora (CURRENT / B1-29 / B30-59). Monto 
 
 ---
 
-## Anécdotas técnicas defendibles
 
-### 1. Bug de producción — `on_schema_change='append_new_columns'`
-
-Un test de `not_null_customer_sk` falló en prod con 43/44 rows NULL. Debug en 4 queries: source limpia, no había orphans, `dim_customers` OK. Root cause: cuando agregué `customer_sk` al modelo incremental `fct_payments`, dbt hizo `ALTER TABLE ADD COLUMN` silencioso vía el default `on_schema_change='append_new_columns'`, dejando NULL en rows históricas.
-
-**Fix inmediato:** `dbt run --full-refresh --select fct_payments --target prod`  
-**Fix estructural:** cambio a `on_schema_change='fail'` — prefiero que el pipeline explote antes que aplicar cambios silenciosos que rompen tests downstream.
-
-Descubrimiento adicional: el full-refresh trajo 27 rows adicionales que el incremental con lookback de 3 días estaba perdiendo (late-arriving payments). La tasa de mora real subió de 11.54% a 14.08% — el dashboard viejo estaba subestimando riesgo por bug del pipeline. La migración destapó el problema.
-
-### 2. Power BI como visualizador puro
+### 1. Power BI como visualizador puro
 
 Migración de dashboard legacy donde las medidas DAX usaban `CALCULATE + COUNTROWS + filters sobre facts atómicos` a un modelo donde Power BI hace solo `SUM(columna)` sobre `rpt_executive_summary`. Cada ratio es `DIVIDE(SUM(numerador), SUM(denominador), 0)` — permite recalcular correcto bajo cualquier filter context (mes, quarter, YTD, por producto).
 
 Especial cuidado con AVG: guardado como `SUM(days_past_due)` + `SUM(payments_count)` separados. Promedio de promedios es matemáticamente incorrecto cuando los grupos tienen distinto tamaño — patrón anti-pattern silencioso en dashboards mid.
 
-### 3. Migración de sintaxis dbt 1.10+ (deprecation warnings)
+### 2. Migración de sintaxis dbt 1.10+ (deprecation warnings)
 
 Al deployar el primer reporting mart a prod, dbt tiró 11 warnings de `MissingArgumentsPropertyInGenericTestDeprecation`. En dbt 1.15+ va a ser error. Abrí un MR `chore/` dedicado migrando todos los generic tests a la sintaxis nueva con la key `arguments:`. Warnings son errors del futuro — un Sr no ignora deprecations aunque aún funcionen.
 
