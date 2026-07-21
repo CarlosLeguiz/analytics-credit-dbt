@@ -126,24 +126,26 @@ Al deployar el primer reporting mart a prod, dbt tiró 11 warnings de `MissingAr
 ---
 ## Estructura del repo
 
+```
 analytics-credit-dbt/
 ├── models/
-│ ├── staging/ # stg_* — 1:1 con sources, renaming + typing
-│ ├── intermediate/ # int_* — lógica de negocio compleja
-│ ├── marts/
-│ │ ├── dims/ # dim_customers, dim_date, dim_products
-│ │ ├── facts/ # fct_applications, fct_originations, fct_payments
-│ │ └── reporting/ # rpt_* — power bi consumers
-│ └── ...
-├── macros/ # generate_customer_sk, mask_pii
-├── snapshots/ # SCD Type 2 sobre credit_bureau
-├── seeds/ # holidays_ar, catalog_products
-├── tests/ # generic + singular tests
-├── .gitlab-ci.yml # dbt parse + compile en cada MR
-├── profiles.yml # CI profile (service account)
-├── packages.yml # dbt_utils, codegen
-└── dbt_project.yml---
-
+│   ├── staging/          # stg_* — 1:1 con sources, renaming + typing
+│   ├── intermediate/     # int_* — lógica de negocio compleja
+│   ├── marts/
+│   │   ├── dims/         # dim_customers, dim_date, dim_products
+│   │   ├── facts/        # fct_applications, fct_originations, fct_payments
+│   │   └── reporting/    # rpt_* — power bi consumers
+│   └── ...
+├── macros/               # generate_customer_sk, mask_pii
+├── snapshots/            # SCD Type 2 sobre credit_bureau
+├── seeds/                # holidays_ar, catalog_products
+├── tests/                # generic + singular tests
+├── .gitlab-ci.yml        # dbt parse + compile en cada MR
+├── profiles.yml          # CI profile (service account)
+├── packages.yml          # dbt_utils, codegen
+└── dbt_project.yml
+```
+---
 ## Setup local
 
 ```bash
@@ -202,4 +204,4 @@ Proyecto de portfolio single-dev con datos sintéticos. Limitaciones honestas:
 
 **Carlos Leguizamón** — Data & BI Analyst  
 Córdoba, Argentina  
-[LinkedIn](https://linkedin.com/in/carlos-leguizamon) · [GitLab](https://gitlab.com/CarlosLeguiz)
+[LinkedIn](https://www.linkedin.com/in/carlos-leguizamon-guillaumet) · [GitLab](https://gitlab.com/CarlosLeguiz)
