@@ -1,3 +1,9 @@
+-- on_schema_change='fail': si cambia el schema del modelo, prefiero que el
+-- pipeline explote antes de aplicar ALTER TABLE silencioso. En un fact con
+-- historia, ADD COLUMN deja NULLs en rows viejas y rompe tests downstream.
+-- Cambios de schema en facts incrementales requieren full-refresh explicito
+-- o backfill planeado, no auto-magia de dbt. Fail loud, fail early.
+
 {{
     config(
         materialized='incremental',
@@ -10,10 +16,9 @@
             "granularity": "month"
         },
         cluster_by=['bucket_code', 'customer_sk', 'due_date'],
-        on_schema_change='append_new_columns'
+        on_schema_change='fail'
     )
 }}
-
 with payments as (
 
     select * from {{ ref('int_payments_delinquency') }}

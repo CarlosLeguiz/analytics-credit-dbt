@@ -1,0 +1,27 @@
+# Profile CI para GitLab CI runner.
+# 
+# Este archivo vive en el repo (raiz del proyecto) y lo usa SOLO el CI
+# de GitLab. dbt-bigquery lo lee porque el .gitlab-ci.yml setea
+# DBT_PROFILES_DIR=$CI_PROJECT_DIR.
+#
+# Autentica con service account key JSON que GitLab CI monta como
+# archivo efimero via variable File-type GCP_SERVICE_ACCOUNT_KEY.
+# El env_var() lee el path al archivo, no el contenido.
+#
+# El profiles.yml REAL para dev vive en ~/.dbt/profiles.yml de cada dev
+# con method: oauth y credenciales personales. NUNCA se commitea.
+
+default:
+  target: ci
+  outputs:
+    ci:
+      type: bigquery
+      method: service-account
+      keyfile: "{{ env_var('GCP_SERVICE_ACCOUNT_KEY') }}"
+      project: dbt-training-502321
+      dataset: dbt_ci
+      threads: 1
+      location: US
+      priority: interactive
+      job_execution_timeout_seconds: 300
+      job_retries: 1

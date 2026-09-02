@@ -1,0 +1,236 @@
+version: 2
+
+models:
+  - name: rpt_executive_summary
+    description: |
+      Reporting mart mensual con split dimensional para la pagina Resumen
+      del dashboard ejecutivo. Grano: (period_month, product_code,
+      customer_segment). Metricas base pre-agregadas para consumo desde
+      Power BI. Ratios se calculan en Power BI con DIVIDE de SUMs para
+      preservar correctness bajo cualquier filter context.
+
+    config:
+      contract:
+        enforced: false
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - period_month
+              - product_code
+              - customer_segment
+
+    columns:
+      - name: period_month
+        description: "Primer dia del mes (parte del grano compuesto)."
+        tests:
+          - not_null
+
+      - name: year_number
+        description: "Numero de anio."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 2020
+                max_value: 2030
+
+      - name: month_number
+        description: "Numero de mes (1-12)."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 1
+                max_value: 12
+
+      - name: month_name
+        description: "Nombre del mes."
+        tests:
+          - not_null
+
+      - name: product_code
+        description: "Codigo de producto (parte del grano compuesto)."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CREDIT_CARD', 'CREDIT_LINE', 'PERSONAL_LOAN']
+                
+      - name: product_name
+        description: "Nombre descriptivo del producto (para display en dashboards)."
+        tests:
+          - not_null
+
+      - name: customer_segment
+        description: "Segmento comercial del cliente (parte del grano compuesto)."
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['A', 'B', 'C', 'D']
+
+      - name: applications_count
+        description: "Total de aplicaciones ingresadas en el mes."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: approved_applications_count
+        description: "Aplicaciones aprobadas. Numerador para Approval Rate."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: rejected_applications_count
+        description: "Aplicaciones rechazadas en el mes."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: originations_count
+        description: "Total de originaciones. Denominador para Ticket Promedio."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: approved_amount_ars
+        description: "Volumen otorgado en ARS. Numerador para Ticket Promedio."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: payments_count
+        description: "Total de pagos registrados. Denominador para Delinquency Rate."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: delinquent_payments_count
+        description: "Pagos delinquent. Numerador para Delinquency Rate."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: sum_days_past_due
+        description: "Suma de DPD. Numerador para DPD Promedio ponderado."
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: dbt_updated_at
+        description: "Timestamp UTC de la ultima corrida del modelo."
+        tests:
+          - not_null
+
+  - name: rpt_portfolio_delinquency
+    description: |
+      Reporting mart mensual de distribucion de cartera por bucket de mora.
+      Grano: (period_month, bucket_code, product_name). Responde: como se
+      distribuye mi cartera por bucket a lo largo del tiempo y por producto.
+
+    config:
+      contract:
+        enforced: false
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - period_month
+              - bucket_code
+              - product_code
+
+    columns:
+      - name: period_month
+        tests:
+          - not_null
+
+      - name: bucket_code
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CURRENT', 'B1_29', 'B30_59', 'B60_89', 'B90_PLUS', 'DEFAULT']
+
+      - name: bucket_name
+        tests:
+          - not_null
+
+      - name: severity_order
+        tests:
+          - not_null
+
+      - name: product_code
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['CREDIT_CARD', 'CREDIT_LINE', 'PERSONAL_LOAN']
+
+      - name: product_name
+        tests:
+          - not_null
+
+      - name: payments_count
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: customers_in_bucket_count
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: delinquent_payments_count
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: total_due_amount_ars
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: total_paid_amount_ars
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: sum_days_past_due
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+
+      - name: dbt_updated_at
+        tests:
+          - not_null

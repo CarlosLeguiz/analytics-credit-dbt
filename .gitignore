@@ -4,3 +4,37 @@ target/
 dbt_packages/
 logs/
 dbt_internal_packages/
+
+# Python virtual environment
+venv/
+.venv/
+env/
+.env
+
+# Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# GCP service account keys - NEVER commit
+*credentials*.json
+*service-account*.json
+gcp-key*.json
+dbt-training-*.json
+
+# VS Code local settings
+.vscode/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# dbt user profiles (should stay in ~/.dbt/ for local dev)
+# NOTE: profiles.yml in repo root is for CI only and IS committed
+.user.yml
+
+# Local overrides
+*.local

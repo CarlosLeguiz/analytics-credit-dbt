@@ -1,0 +1,60 @@
+# GitLab CI para analytics-credit-dbt.
+# Objetivo: validar sintaxis del proyecto dbt en cada MR y push a main.
+#
+# Que hace:
+#   - dbt_parse:   valida que el proyecto sea parseable (rapido)
+#   - dbt_compile: compila el proyecto y valida refs, sources y macros
+
+
+# Imagen Docker con Python 3.12
+image: python:3.12-slim
+
+# Cache para no re-instalar dbt en cada corrida
+cache:
+  key: dbt-cache-v1
+  paths:
+    - .cache/pip
+    - dbt_packages/
+
+variables:
+  # Configuracion pip para usar cache local
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  # Dbt necesita saber donde vive profiles.yml
+  DBT_PROFILES_DIR: "$CI_PROJECT_DIR"
+
+# Etapas del pipeline (en orden)
+stages:
+  - validate
+
+# Setup comun antes de cualquier job
+.dbt_setup: &dbt_setup
+  before_script:
+    - apt-get update && apt-get install -y git
+    - pip install --upgrade pip
+    - pip install dbt-bigquery==1.12.0
+    - dbt --version
+    - dbt deps
+
+# Job 1: parse (rapido)
+dbt_parse:
+  stage: validate
+  <<: *dbt_setup
+  script:
+    - echo "Validando que el proyecto sea parseable..."
+    - dbt parse
+  rules:
+    # Corre en MRs y push a main
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+
+# Job 2: compile (mas completo)
+dbt_compile:
+  stage: validate
+  <<: *dbt_setup
+  script:
+    - echo "Compilando proyecto dbt..."
+    - dbt compile
+  rules:
+    # Corre en MRs y push a main
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
