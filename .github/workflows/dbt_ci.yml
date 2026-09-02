@@ -1,0 +1,50 @@
+name: dbt CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  dbt_parse_and_compile:
+    name: dbt parse + compile
+    runs-on: ubuntu-latest
+
+    env:
+      DBT_PROFILES_DIR: ${{ github.workspace }}
+      GCP_SERVICE_ACCOUNT_KEY: ${{ github.workspace }}/gcp-sa-key.json
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dbt-bigquery
+        run: |
+          python -m pip install --upgrade pip
+          pip install dbt-bigquery==1.12.0
+
+      - name: Write service account key
+        run: |
+          echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > $GCP_SERVICE_ACCOUNT_KEY
+          chmod 600 $GCP_SERVICE_ACCOUNT_KEY
+
+      - name: dbt deps
+        run: dbt deps
+
+      - name: dbt parse
+        run: dbt parse --target ci
+
+      - name: dbt compile
+        run: dbt compile --target ci
+
+      - name: Cleanup credentials
+        if: always()
+        run: rm -f $GCP_SERVICE_ACCOUNT_KEY
