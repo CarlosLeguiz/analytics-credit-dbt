@@ -65,7 +65,7 @@ Los reporting marts (`rpt_executive_summary`, `rpt_portfolio_delinquency`) expon
 - **Surrogate keys via macro custom** (`generate_customer_sk`) para consistencia entre facts y dims
 - **Incremental fact** (`fct_payments`) con `merge` strategy, partition mensual y clustering sobre `bucket_code + customer_sk + due_date`
 - **Reporting layer explícita** (`rpt_*`) con grano dimensional (`period_month + product + segment`) — Power BI hace solo `SUM/COUNT/DIVIDE`
-- **CI/CD en GitLab** con service account BigQuery least-privilege, valida `dbt parse + compile` en cada MR
+- **CI/CD en GitHub** con service account BigQuery least-privilege, valida `dbt parse + compile` en cada MR
 - **Airflow DAG productivo** con freshness check + trigger dbt Cloud + on_failure_callback + exponential backoff
 - **Kimball semántico**: dimensiones conformadas (`dim_date` en schema `core` accesible desde múltiples dominios)
 
