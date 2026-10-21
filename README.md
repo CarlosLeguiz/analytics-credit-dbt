@@ -192,6 +192,6 @@ Proyecto de portfolio single-dev con datos sintéticos. Limitaciones honestas:
 
 ## Autor
 
-**Carlos Leguizamón** — Data & BI Analyst  
+**Carlos Leguizamón** 
 Córdoba, Argentina  
 [LinkedIn](https://www.linkedin.com/in/carlos-leguizamon-guillaumet) · [GitLab](https://gitlab.com/CarlosLeguiz)
